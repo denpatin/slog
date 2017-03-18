@@ -8,6 +8,7 @@ var concatJs = require('gulp-concat');
 var minifyJs = require('gulp-uglify');
 var concatCss = require('gulp-concat-css');
 var minifyCss = require('gulp-minify-css');
+var purifyCss = require('gulp-purifycss');
 
 var buildDir = 'assets/build/'
 var assetsDir = 'assets/src/';
@@ -47,4 +48,10 @@ gulp.task('clean', function () {
   ]);
 });
 
-gulp.task('default', ['clean', 'minify']);
+gulp.task('purify', ['css', 'minify'], function() {
+  return gulp.src(buildDir + '*.css')
+    .pipe(purifyCss(['*.html']))
+    .pipe(gulp.dest(buildDir));
+});
+
+gulp.task('default', ['clean', 'js', 'css', 'minify', 'purify']);
