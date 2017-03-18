@@ -18,6 +18,12 @@ var jsDir = assetsDir + 'js/';
 var cssSrc = ['mui', 'layout'];
 var jsSrc = ['mui'];
 
+gulp.task('clean', function () {
+  return del([
+    buildDir + 'application.*'
+  ]);
+});
+
 gulp.task('js', function() {
   return gulp.src(jsSrc.map(function(js) {
     return jsDir.concat(js, '.js')
@@ -42,16 +48,14 @@ gulp.task('minify', ['js', 'css'], function() {
     .pipe(gulp.dest(buildDir));
 });
 
-gulp.task('clean', function () {
-  return del([
-    buildDir + 'application.*'
-  ]);
-});
-
-gulp.task('purify', ['css', 'minify'], function() {
-  return gulp.src(buildDir + '*.css')
-    .pipe(purifyCss(['*.html']))
+gulp.task('purify', ['js', 'css'], function() {
+  return gulp.src(buildDir + 'application*')
+    .pipe(gulpif(['*.css'], purifyCss(['*.html'])))
+    .pipe(gulpif(['*.css'], minifyCss()))
+    .pipe(gulpif(['*.js'], minifyJs()))
+    .pipe(rename({ suffix: '.min' }))
     .pipe(gulp.dest(buildDir));
 });
 
-gulp.task('default', ['clean', 'js', 'css', 'minify', 'purify']);
+gulp.task('dev', ['clean', 'js', 'css', 'minify']);
+gulp.task('prod', ['clean', 'js', 'css', 'purify']);

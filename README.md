@@ -34,7 +34,7 @@ For now, just execute the `ruby build.rb > index.html` command. Then you find th
 
 ### Working with Assets
 
-Run the `gulp` command to recompile the assets. You can find the build-ready versions in the `assets/build` directory.
+Run the `gulp dev` command (or `gulp prod` for cleaning unused css) to recompile the assets. You can find the build-ready versions in the `assets/build` directory.
 
 ### Creating New Post
 
